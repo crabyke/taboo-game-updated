@@ -1064,6 +1064,7 @@ let words = [
   },
 ];
 
+// CARD ELEMENTS
 const word = document.querySelector(".card__title");
 const tabooWordsBlock = document.querySelector(".card__tabooWordContainer");
 const passBtn = document.querySelector(".pass");
@@ -1073,7 +1074,7 @@ let randomNmr;
 
 // GET RANDOM WORD INSIDE THE CARD FUNCTION- MAIN FUNCTION
 const getWord = () => {
-  randomNmr = Math.floor(Math.random() * words.length) + 1;
+  randomNmr = Math.floor(Math.random() * words.length);
   console.log(randomNmr);
   tabooWordsBlock.innerHTML = "";
   word.textContent = words[randomNmr].guessWord;
@@ -1082,6 +1083,7 @@ const getWord = () => {
     let tabooWordContainer = document.createElement("h1");
     tabooWordContainer.textContent = tabooWord;
     tabooWordsBlock.appendChild(tabooWordContainer);
+    updatePoints();
   });
 
   // REMOVE THE WORD FROM THE ARRAY
@@ -1133,18 +1135,132 @@ function startTimer(duration, timerBlock) {
       timerBlock.style.color = "red";
     }
     if (seconds == 0) {
-      window.alert("A pontszámod: " + pointCounterValue);
+      endRoundPopup();
+      checkIfPopupVisible();
     }
   }, 1000);
 }
 
-// EVENT LISTENERS
+// POPUP WINDOW ELEMENTS
+let container = document.querySelector(".container");
+let popupWindow = document.querySelector(".container__popup");
+let teamOneInput = document.querySelector(".team1");
+let teamTwoInput = document.querySelector(".team2");
+let goBtn = document.querySelector(".go");
 
+let teams = [
+  { teamName: "", points: 0 },
+  { teamName: "", points: 0 },
+];
+
+// FUNCTION TO RUN ON THE "GAME ON!" BUTTON
+const gameStart = () => {
+  teams[0].teamName = teamOneInput.value;
+  teams[1].teamName = teamTwoInput.value;
+  if (teams[0].teamName === teams[1].teamName) {
+    alert("A két csapat neve nem lehet ugyanaz!");
+    return;
+  }
+  popupWindow.style.opacity = "0";
+  checkIfPopupVisible();
+  pointCounterValue = 0;
+  timerBlock.textContent = "";
+  startTimer(roundTime, timerBlock);
+  getWord();
+};
+
+// CHECK IF THE POPUP IS VISIBLE FUNCTION
+const checkIfPopupVisible = () => {
+  if (popupWindow.style.opacity === "1") {
+    container.style.filter = "blur(10px)";
+    passBtn.disabled = true;
+    okBtn.disabled = true;
+    tabooBtn.disabled = true;
+  } else {
+    container.style.filter = "blur(0px)";
+    passBtn.disabled = false;
+    okBtn.disabled = false;
+    tabooBtn.disabled = false;
+  }
+};
+
+// DISPLAY POINTS
+let teamOnePointContainer = document.querySelector(
+  ".container__teamNameContainer_team1Container"
+);
+let teamTwoPointContainer = document.querySelector(
+  ".container__teamNameContainer_team2Container"
+);
+
+const updatePoints = () => {
+  teamOnePointContainer.textContent = `${(teams[0].teamName =
+    teamOneInput.value)} : ${teams[0].points} pont`;
+  teamTwoPointContainer.textContent = `${(teams[1].teamName =
+    teamTwoInput.value)} : ${teams[1].points} pont`;
+};
+
+// EVENT LISTENERS
 passBtn.addEventListener("click", passBtnFunction);
 okBtn.addEventListener("click", okBtnFunction);
 tabooBtn.addEventListener("click", tabooBtnFunction);
+goBtn.addEventListener("click", gameStart);
 
-window.onload = (event) => {
-  getWord();
-  startTimer(roundTime, timerBlock);
+//END OF THE ROUND POPUP WINDOW
+const endRoundPopup = () => {
+  popupWindow.style.opacity = "1";
+  popupWindow.innerHTML = `
+  <img src="./img/logo.png"
+      alt="Logo"
+      class="animate__animated animate__backInLeft"
+      />
+      <h3 style="text-align: center; line-height: 1.5;" class="container__popupyourPointsInThisRound">Ebben a körben ${pointCounterValue} pontot szerzett a csapatod.</h3>
+      <div class="container__popup_buttonContainer">        
+      <button
+      class="button blue actualPoints animate__animated animate__fadeIn animate"
+      >Jelenlegi Pontállás!</button>
+      <button
+      class="button green nextTeam animate__animated animate__fadeIn animate"
+      >Következő csapat!</button>
+      </div>
+  `;
+  let actualPointsBtn = document.querySelector(".actualPoints");
+  actualPointsBtn.addEventListener("click", showActualPoints);
+
+  let nextTeamBtn = document.querySelector(".nextTeam");
+  nextTeamBtn.addEventListener("click", gameStart);
 };
+
+// SHOW ACTUAL POINTS PAGE
+const showActualPoints = () => {
+  popupWindow.innerHTML = `
+  <img
+  src="./img/logo.png"
+  alt="Logo"
+  class="animate__animated animate__backInLeft"
+  />
+  <div class="actualPointPage">
+  <h3 class="actualPointPageText" style="text-align: center;" >
+  A(z) ${teams[0].teamName} csapat jelenlegi pontszáma: ${teams[0].points} pont
+  <br>
+  <br>
+  A(z) ${teams[1].teamName} csapat jelenlegi pontszáma: ${teams[1].points} pont
+  </h1>
+  <button
+      class="button blue actualPointsBackBtn animate__animated animate__fadeIn animate__delay-1s effect-2" style="margin-top: 1.5em; width: 50%;"
+      >Vissza az előző oldalra!</button>
+  </div>
+  `;
+
+  let actualPointsBackBtn = document.querySelector(".actualPointsBackBtn");
+  actualPointsBackBtn.addEventListener("click", endRoundPopup);
+};
+
+// WHAT TO DO WHEN THE PAGE LOADS
+window.onload = (event) => {
+  popupWindow.style.opacity = "1"; // VISSZA KELL ÍRNI MAJD AZ ONLOAD OPACITY-T 1-re
+  checkIfPopupVisible();
+};
+
+const pointCalculation = () => {};
+
+const giveActiveStatus = () => {};

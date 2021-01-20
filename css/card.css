@@ -1,0 +1,36 @@
+.card {
+  position: relative;
+  z-index: 0;
+  background-color: #b3cdd1;
+  background-image: linear-gradient(315deg, #b3cdd1 0%, #9fa4c4 74%);
+  height: 70vh;
+  width: 85%;
+  border-radius: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  text-align: center;
+  overflow: hidden;
+  text-transform: uppercase;
+}
+
+.card__title {
+  background-color: #555a78;
+  width: 100%;
+  padding: 20px;
+  color: white;
+  letter-spacing: 2px;
+}
+
+.card h1 {
+  color: white;
+  padding: 10px;
+}
+/*# sourceMappingURL=card.css.map */

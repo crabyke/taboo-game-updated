@@ -1,8 +1,7 @@
 .button {
   display: inline-block;
   position: relative;
-  height: 33px;
-  line-height: 33px;
+  height: 80%;
   padding: 0 15px;
   font-size: 15px;
   color: white;
@@ -13,7 +12,6 @@
   outline: 0;
   -webkit-box-shadow: 0 2px 1px rgba(0, 0, 0, 0.25);
   box-shadow: 0 2px 1px rgba(0, 0, 0, 0.25);
-  margin: 0px 10px 15px 10px;
   font-weight: bold;
 }
 
@@ -210,6 +208,8 @@
 }
 
 .button.green {
+  margin: 0px 10px 3em 10px;
+
   background: #3e952d;
   border-color: #29621e #275e1c #1d4715;
   background-image: -webkit-linear-gradient(
@@ -669,4 +669,8 @@
 
 .lt-ie9 .button:before {
   display: none;
+}
+
+.container__popup__dataContainer .go {
+  margin-top: 2.5em;
 }
