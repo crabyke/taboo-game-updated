@@ -1094,7 +1094,40 @@ const getWord = () => {
   });
 
   // REMOVE THE WORD FROM THE ARRAY
+  words.splice(randomNmr, 1);
+  if (words.length === 0) {
+    endOfGame();
+    let newGameBtn = document.querySelector(".newGame");
+    newGameBtn.addEventListener("click", () => {
+      location.reload();
+    });
+  }
 };
+
+// END OF GAME POPUP
+function endOfGame() {
+  popupWindow.style.opacity = "1";
+  popupWindow.innerHTML = `
+    <img
+    src="./img/logo.png"
+    alt="Logo"
+    class="animate__animated animate__backInLeft"
+    />
+    <div class="container__popup__dataContainer" style="text-align: center">
+    <h3>Elfogytak a szavak!</h3>
+    <h3>Sajnos a játéknak vége.</h3>
+    <h3>A végső pontszámok:</h3>
+    <h3>${teams[0].teamName} : ${teams[0].points} pont</h3>
+    <h3>${teams[1].teamName} : ${teams[1].points} pont</h3>
+    <button
+      class="button green newGame animate__animated animate__fadeIn animate__delay-1s effect-2"
+    >
+      Új játék indítása!
+    </button>
+    </div>
+    `;
+  checkIfPopupVisible();
+}
 
 // OK BUTTON FUNCTION
 const okBtnFunction = () => {
@@ -1182,7 +1215,6 @@ const gameStart = () => {
     return;
   }
   popupWindow.style.opacity = "0";
-
   checkIfPopupVisible();
   pointCounterValue = 0;
   timerBlock.textContent = "";
@@ -1283,11 +1315,6 @@ const endRoundPopup = () => {
     passCounterValue = 2;
     passCounter.innerHTML = `Passz: ${passCounterValue}`;
   });
-
-  console.log(teams[0].active);
-  console.log(teams[1].active);
-  console.log(teams[0].points);
-  console.log(teams[1].points);
 };
 
 // ENDROUND FUNCTIONS
@@ -1302,10 +1329,10 @@ const showActualPoints = () => {
   />
   <div class="actualPointPage">
   <h3 class="actualPointPageText" style="text-align: center;" >
-  A(z) ${teams[0].teamName} csapat jelenlegi pontszáma: ${teams[0].points} pont
+  A(z) ${teams[0].teamName} csapat jelenlegi pontszáma: <br> ${teams[0].points} pont
   <br>
   <br>
-  A(z) ${teams[1].teamName} csapat jelenlegi pontszáma: ${teams[1].points} pont
+  A(z) ${teams[1].teamName} csapat jelenlegi pontszáma: <br> ${teams[1].points} pont
   </h1>
   <button
       class="button blue actualPointsBackBtn animate__animated animate__fadeIn animate__delay-1s effect-2" style="margin-top: 1.5em; width: 50%;"
