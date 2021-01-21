@@ -1142,6 +1142,8 @@ function startTimer(duration, timerBlock) {
     }
     if (seconds < 11) {
       timerBlock.style.color = "red";
+    } else {
+      timerBlock.style.color = "inherit";
     }
     function myStopFunction() {
       clearInterval(timerFunction);
@@ -1180,6 +1182,7 @@ const gameStart = () => {
     return;
   }
   popupWindow.style.opacity = "0";
+
   checkIfPopupVisible();
   pointCounterValue = 0;
   timerBlock.textContent = "";
@@ -1277,6 +1280,8 @@ const endRoundPopup = () => {
       actualPointsBtn.style.userSelect = "auto";
       nextTeamBtn.style.userSelect = "auto";
     }
+    passCounterValue = 2;
+    passCounter.innerHTML = `Passz: ${passCounterValue}`;
   });
 
   console.log(teams[0].active);
