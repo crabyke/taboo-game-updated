@@ -1227,15 +1227,7 @@ const checkIfPopupVisible = () => {
   }
 };
 
-// DISPLAY POINTS
-let teamOnePointContainer = document.querySelector(
-  ".container__teamNameContainer_team1Container"
-);
-let teamTwoPointContainer = document.querySelector(
-  ".container__teamNameContainer_team2Container"
-);
-
-const updatePoints = () => {
+const currentPoints = () => {
   teamOnePointContainer.textContent = `${(teams[0].teamName =
     teamOneInput.value)} : ${teams[0].points} pont`;
   teamTwoPointContainer.textContent = `${(teams[1].teamName =
