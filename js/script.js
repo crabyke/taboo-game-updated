@@ -1104,31 +1104,6 @@ const getWord = () => {
   }
 };
 
-// END OF GAME POPUP
-function endOfGame() {
-  popupWindow.style.opacity = "1";
-  popupWindow.innerHTML = `
-    <img
-    src="./img/logo.png"
-    alt="Logo"
-    class="animate__animated animate__backInLeft"
-    />
-    <div class="container__popup__dataContainer" style="text-align: center">
-    <h3>Elfogytak a szavak!</h3>
-    <h3>Sajnos a játéknak vége.</h3>
-    <h3>A végső pontszámok:</h3>
-    <h3>${teams[0].teamName} : ${teams[0].points} pont</h3>
-    <h3>${teams[1].teamName} : ${teams[1].points} pont</h3>
-    <button
-      class="button green newGame animate__animated animate__fadeIn animate__delay-1s effect-2"
-    >
-      Új játék indítása!
-    </button>
-    </div>
-    `;
-  checkIfPopupVisible();
-}
-
 // OK BUTTON FUNCTION
 const okBtnFunction = () => {
   getWord();
@@ -1343,6 +1318,32 @@ const showActualPoints = () => {
   let actualPointsBackBtn = document.querySelector(".actualPointsBackBtn");
   actualPointsBackBtn.addEventListener("click", endRoundPopup);
 };
+
+// END OF GAME POPUP
+function endOfGame() {
+  pointCalculation();
+  popupWindow.style.opacity = "1";
+  popupWindow.innerHTML = `
+    <img
+    src="./img/logo.png"
+    alt="Logo"
+    class="animate__animated animate__backInLeft"
+    />
+    <div class="container__popup__dataContainer" style="text-align: center">
+    <h3>Elfogytak a szavak!</h3>
+    <h3>Sajnos a játéknak vége.</h3>
+    <h3>A végső pontszámok:</h3>
+    <h3>${teams[0].teamName} : ${teams[0].points} pont</h3>
+    <h3>${teams[1].teamName} : ${teams[1].points} pont</h3>
+    <button
+      class="button green newGame animate__animated animate__fadeIn animate__delay-1s effect-2"
+    >
+      Új játék indítása!
+    </button>
+    </div>
+    `;
+  checkIfPopupVisible();
+}
 
 // WHAT TO DO WHEN THE PAGE LOADS
 window.onload = (event) => {
