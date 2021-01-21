@@ -1064,6 +1064,14 @@ let words = [
   },
 ];
 
+// DISPLAY POINTS
+let teamOnePointContainer = document.querySelector(
+  ".container__teamNameContainer_team1Container"
+);
+let teamTwoPointContainer = document.querySelector(
+  ".container__teamNameContainer_team2Container"
+);
+
 // CARD ELEMENTS
 const word = document.querySelector(".card__title");
 const tabooWordsBlock = document.querySelector(".card__tabooWordContainer");
@@ -1075,7 +1083,6 @@ let randomNmr;
 // GET RANDOM WORD INSIDE THE CARD FUNCTION- MAIN FUNCTION
 const getWord = () => {
   randomNmr = Math.floor(Math.random() * words.length);
-  console.log(randomNmr);
   tabooWordsBlock.innerHTML = "";
   word.textContent = words[randomNmr].guessWord;
 
@@ -1083,7 +1090,7 @@ const getWord = () => {
     let tabooWordContainer = document.createElement("h1");
     tabooWordContainer.textContent = tabooWord;
     tabooWordsBlock.appendChild(tabooWordContainer);
-    updatePoints();
+    currentPoints();
   });
 
   // REMOVE THE WORD FROM THE ARRAY
@@ -1119,7 +1126,7 @@ function startTimer(duration, timerBlock) {
   let timer = duration,
     minutes,
     seconds;
-  setInterval(function () {
+  let timerFunction = setInterval(function () {
     minutes = parseInt(timer / 60, 10);
     seconds = parseInt(timer % 60, 10);
 
@@ -1134,9 +1141,15 @@ function startTimer(duration, timerBlock) {
     if (seconds < 11) {
       timerBlock.style.color = "red";
     }
-    if (seconds == 0) {
+    function myStopFunction() {
+      clearInterval(timerFunction);
+    }
+
+    if (timerBlock.textContent == "00") {
+      myStopFunction();
       endRoundPopup();
       checkIfPopupVisible();
+      pointCalculation();
     }
   }, 1000);
 }
@@ -1149,8 +1162,8 @@ let teamTwoInput = document.querySelector(".team2");
 let goBtn = document.querySelector(".go");
 
 let teams = [
-  { teamName: "", points: 0 },
-  { teamName: "", points: 0 },
+  { teamName: "", points: 0, active: true },
+  { teamName: "", points: 0, active: false },
 ];
 
 // FUNCTION TO RUN ON THE "GAME ON!" BUTTON
@@ -1160,6 +1173,9 @@ const gameStart = () => {
   if (teams[0].teamName === teams[1].teamName) {
     alert("A két csapat neve nem lehet ugyanaz!");
     return;
+  } else if (teams[0].teamName === "" || teams[1].teamName === "") {
+    alert("A csapatnév nem lehet üres!");
+    return;
   }
   popupWindow.style.opacity = "0";
   checkIfPopupVisible();
@@ -1167,7 +1183,34 @@ const gameStart = () => {
   timerBlock.textContent = "";
   startTimer(roundTime, timerBlock);
   getWord();
+  goBtn.disabled = true;
 };
+
+// GIVE ACTIVE STATUS TO THE CURRENT TEAM
+function giveActiveStatus() {
+  if (teamOnePointContainer.classList.contains("active")) {
+    teamOnePointContainer.classList.remove("active");
+    teams[0].active = false;
+    teamTwoPointContainer.classList.add("active");
+    teams[1].active = true;
+  } else if (teamTwoPointContainer.classList.contains("active")) {
+    teamTwoPointContainer.classList.remove("active");
+    teams[1].active = false;
+    teamOnePointContainer.classList.add("active");
+    teams[0].active = true;
+  }
+}
+
+// COUNT THE POINTS OF THE ACTIVE TEAM
+function pointCalculation() {
+  if (teams[0].active === true) {
+    teams[0].points += pointCounterValue;
+    console.log(teams[0].points);
+  } else if (teams[1].active === true) {
+    teams[1].points += pointCounterValue;
+    console.log(teams[1].points);
+  }
+}
 
 // CHECK IF THE POPUP IS VISIBLE FUNCTION
 const checkIfPopupVisible = () => {
@@ -1223,12 +1266,32 @@ const endRoundPopup = () => {
       >Következő csapat!</button>
       </div>
   `;
+
   let actualPointsBtn = document.querySelector(".actualPoints");
   actualPointsBtn.addEventListener("click", showActualPoints);
 
   let nextTeamBtn = document.querySelector(".nextTeam");
-  nextTeamBtn.addEventListener("click", gameStart);
+  nextTeamBtn.addEventListener("click", () => {
+    gameStart();
+    giveActiveStatus();
+    pointCounterValue = 0;
+    pointCounter.innerHTML = `Pontszám: ${pointCounterValue}`;
+    if (popupWindow.style.opacity === "0") {
+      actualPointsBtn.disabled = true;
+      nextTeamBtn.disabled = true;
+    } else {
+      actualPointsBtn.style.userSelect = "auto";
+      nextTeamBtn.style.userSelect = "auto";
+    }
+  });
+
+  console.log(teams[0].active);
+  console.log(teams[1].active);
+  console.log(teams[0].points);
+  console.log(teams[1].points);
 };
+
+// ENDROUND FUNCTIONS
 
 // SHOW ACTUAL POINTS PAGE
 const showActualPoints = () => {
@@ -1260,7 +1323,3 @@ window.onload = (event) => {
   popupWindow.style.opacity = "1"; // VISSZA KELL ÍRNI MAJD AZ ONLOAD OPACITY-T 1-re
   checkIfPopupVisible();
 };
-
-const pointCalculation = () => {};
-
-const giveActiveStatus = () => {};
