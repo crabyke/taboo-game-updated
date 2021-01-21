@@ -1064,6 +1064,15 @@ let words = [
   },
 ];
 
+// DECLARE TEAMS
+let teams = [
+  { teamName: "", points: 0, active: true },
+  { teamName: "", points: 0, active: false },
+];
+
+// FLAG FOR END OF GAME POPUP
+let endOfGameRan = false;
+
 // DISPLAY POINTS
 let teamOnePointContainer = document.querySelector(
   ".container__teamNameContainer_team1Container"
@@ -1131,7 +1140,7 @@ const tabooBtnFunction = () => {
 
 // TIMER FUNCTION
 let timerBlock = document.querySelector(".container__timer");
-let roundTime = 59;
+let roundTime = 15;
 function startTimer(duration, timerBlock) {
   let timer = duration,
     minutes,
@@ -1156,12 +1165,15 @@ function startTimer(duration, timerBlock) {
     function myStopFunction() {
       clearInterval(timerFunction);
     }
-
     if (timerBlock.textContent == "00") {
       myStopFunction();
-      endRoundPopup();
-      checkIfPopupVisible();
-      pointCalculation();
+      if (endOfGameRan === false) {
+        endRoundPopup();
+        checkIfPopupVisible();
+        pointCalculation();
+      } else {
+        return;
+      }
     }
   }, 1000);
 }
@@ -1172,11 +1184,6 @@ let popupWindow = document.querySelector(".container__popup");
 let teamOneInput = document.querySelector(".team1");
 let teamTwoInput = document.querySelector(".team2");
 let goBtn = document.querySelector(".go");
-
-let teams = [
-  { teamName: "", points: 0, active: true },
-  { teamName: "", points: 0, active: false },
-];
 
 // FUNCTION TO RUN ON THE "GAME ON!" BUTTON
 const gameStart = () => {
@@ -1320,9 +1327,16 @@ const showActualPoints = () => {
 };
 
 // END OF GAME POPUP
-function endOfGame() {
+
+const endOfGame = () => {
   pointCalculation();
   popupWindow.style.opacity = "1";
+  let winner;
+  if (teams[0].points > teams[1].points) {
+    winner = teams[0].teamName;
+  } else {
+    winner = teams[1].teamName;
+  }
   popupWindow.innerHTML = `
     <img
     src="./img/logo.png"
@@ -1332,9 +1346,7 @@ function endOfGame() {
     <div class="container__popup__dataContainer" style="text-align: center">
     <h3>Elfogytak a szavak!</h3>
     <h3>Sajnos a játéknak vége.</h3>
-    <h3>A végső pontszámok:</h3>
-    <h3>${teams[0].teamName} : ${teams[0].points} pont</h3>
-    <h3>${teams[1].teamName} : ${teams[1].points} pont</h3>
+    <h3>A győztes csapat: ${winner}</h3>
     <button
       class="button green newGame animate__animated animate__fadeIn animate__delay-1s effect-2"
     >
@@ -1343,7 +1355,8 @@ function endOfGame() {
     </div>
     `;
   checkIfPopupVisible();
-}
+  endOfGameRan = true;
+};
 
 // WHAT TO DO WHEN THE PAGE LOADS
 window.onload = (event) => {
