@@ -1109,7 +1109,9 @@ const passBtnFunction = () => {
     ? alert("Nincs több passz lehetőséged!")
     : passCounterValue--;
   passCounter.innerHTML = `Passz: ${passCounterValue}`;
-  getWord();
+  if (passCounterValue > 0) {
+    getWord();
+  }
 };
 
 // TABOO BUTTON FUNCTION
