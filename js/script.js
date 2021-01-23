@@ -1140,7 +1140,7 @@ const tabooBtnFunction = () => {
 
 // TIMER FUNCTION
 let timerBlock = document.querySelector(".container__timer");
-let roundTime = 15;
+let roundTime = 59;
 function startTimer(duration, timerBlock) {
   let timer = duration,
     minutes,
